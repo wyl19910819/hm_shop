@@ -58,7 +58,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("首页")),
       body: SafeArea(
         child: IndexedStack(index: _currentIndex, children: _getChildren()),
       ),
