@@ -81,7 +81,7 @@ class _HmSliderState extends State<HmSlider> {
                 _carouselSliderController.jumpToPage(index);
               },
               child: AnimatedContainer(
-                duration: Duration(seconds: 1),
+                duration: Duration(milliseconds: 300),
                   width: _currentIndex == index ? 30 : 20,
                   height: 6,
                   decoration: BoxDecoration(
