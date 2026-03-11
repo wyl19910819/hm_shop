@@ -17,7 +17,7 @@ class DioRequest {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onError: (error, handler) {
-          print("error:${error.message}");
+          print("error:${error.requestOptions.uri}-${error.message}");
           handler.reject(error);
         },
         onResponse: (response, handler) {

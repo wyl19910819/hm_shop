@@ -12,7 +12,6 @@ class HmSuggestion extends StatefulWidget {
 class _HmSuggestionState extends State<HmSuggestion> {
   List<GoodsItem> _getDisplayItem() {
     if(widget.goodsList.subTypes.isEmpty) return [];
-    print("widget.goodsList:${widget.goodsList}");
     return widget.goodsList.subTypes.first.goodsItems.items.take(3).toList();
   }
 
