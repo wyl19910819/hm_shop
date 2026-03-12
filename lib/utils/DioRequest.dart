@@ -18,7 +18,13 @@ class DioRequest {
       InterceptorsWrapper(
         onError: (error, handler) {
           print("error:${error.requestOptions.uri}-${error.message}");
-          handler.reject(error);
+
+          handler.reject(
+            DioException(
+              requestOptions: error.requestOptions,
+              message: error.response?.data["msg"] ?? "",
+            ),
+          );
         },
         onResponse: (response, handler) {
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
@@ -35,8 +41,12 @@ class DioRequest {
     );
   }
 
-  get(String url, {Map<String, dynamic>? params}) {
+  Future<dynamic> get(String url, {Map<String, dynamic>? params}) {
     return _handleResponse(_dio.get(url, queryParameters: params));
+  }
+
+  Future<dynamic> post(String url, {Map<String, dynamic>? params}) {
+    return _handleResponse(_dio.post(url, data: params));
   }
 
   Future<dynamic> _handleResponse(Future<Response<dynamic>> task) async {
@@ -46,9 +56,13 @@ class DioRequest {
       if (data["code"] == GlobalConstants.SUCCESS_CODE) {
         return data["result"];
       }
-      throw Exception(data["msg"] ?? "加载数据异常");
+      throw DioException(
+        requestOptions: res.requestOptions,
+        message: data["msg"] ?? "加载数据异常",
+      );
     } catch (e) {
-      throw Exception(e);
+      // throw Exception(e);
+      rethrow;
     }
   }
 }

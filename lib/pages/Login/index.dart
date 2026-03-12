@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hm_shop/api/user.dart';
 import 'package:hm_shop/utils/ToastUitls.dart';
+import 'package:hm_shop/viewmodels/login.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -11,6 +14,22 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool? _isChecked = false;
   GlobalKey<FormState> _globalKey = GlobalKey();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  UserInfo _userInfo = UserInfo(id: '', account: '', mobile: '', token: '', avatar: '', nickname: '', gender: '', birthday: '', cityCode: '', provinceCode: '', profession: '');
+
+  Future<void> _login() async {
+    try {
+      _userInfo = await loginAPI({
+        "account": _phoneController.text,
+        "password": _passwordController.text,
+      });
+      ToastUtils.show(context, "登录成功:${_userInfo.nickname}");
+      Navigator.pop(context);
+    } catch (e) {
+      ToastUtils.show(context, "登录失败：${(e as DioException).message}");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +56,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               TextFormField(
+                controller: _phoneController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "手机号不能为空";
                   }
-                  if(!RegExp(r"^1[3-9]\d{9}$").hasMatch(value)){
+                  if (!RegExp(r"^1[3-9]\d{9}$").hasMatch(value)) {
                     return "手机号码格式不正确";
                   }
                   return null;
@@ -58,11 +78,12 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 16),
               TextFormField(
+                controller: _passwordController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "密码不能为空";
                   }
-                  if(!RegExp(r"^[A-Za-z0-9_]{6,16}$").hasMatch(value)){
+                  if (!RegExp(r"^[A-Za-z0-9_]{6,16}$").hasMatch(value)) {
                     return "密码格式不正确";
                   }
                   return null;
@@ -127,12 +148,14 @@ class _LoginPageState extends State<LoginPage> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.indigo,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.circular(10),
+                    ),
                   ),
                   onPressed: () {
-                    if(_globalKey.currentState!.validate()){
-                      if(_isChecked == true){
-                        
+                    if (_globalKey.currentState!.validate()) {
+                      if (_isChecked == true) {
+                        _login();
                       } else {
                         ToastUtils.show(context, "请同意隐私协议");
                       }
