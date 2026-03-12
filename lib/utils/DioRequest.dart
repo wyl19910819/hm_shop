@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hm_shop/constants/index.dart';
+import 'package:hm_shop/stores/TokenManager.dart';
 
 class DioRequest {
   final _dio = Dio();
@@ -35,6 +36,11 @@ class DioRequest {
           handler.reject(DioException(requestOptions: response.requestOptions));
         },
         onRequest: (options, handler) {
+          if(tokenManager.getToken().isNotEmpty){
+            options.headers = {
+              "Authorization":"Bearer ${tokenManager.getToken()}"
+            };
+          }
           handler.next(options);
         },
       ),

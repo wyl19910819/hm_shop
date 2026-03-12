@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hm_shop/api/home.dart';
+import 'package:hm_shop/api/user.dart';
 import 'package:hm_shop/components/Mine/HmMineMoreList.dart';
 import 'package:hm_shop/stores/UserController.dart';
 import 'package:hm_shop/viewmodels/home.dart';
+import 'package:hm_shop/viewmodels/login.dart';
 
 class Mineview extends StatefulWidget {
   Mineview({Key? key}) : super(key: key);
@@ -13,8 +15,21 @@ class Mineview extends StatefulWidget {
 }
 
 class _MineviewState extends State<Mineview> {
-  Usercontroller _usercontroller = Get.put(Usercontroller());
+  Usercontroller _usercontroller = Get.find();
   Result _goodsList = Result(id: '', title: '', subTypes: []);
+  UserInfo _userInfo = UserInfo(
+    id: "",
+    account: "",
+    mobile: "",
+    token: "",
+    avatar: "",
+    nickname: "",
+    gender: "",
+    birthday: "",
+    cityCode: "",
+    provinceCode: "",
+    profession: "",
+  );
 
   Widget _getHeader() {
     return Obx(() {

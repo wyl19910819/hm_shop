@@ -5,3 +5,7 @@ import 'package:hm_shop/viewmodels/login.dart';
 Future<UserInfo> loginAPI(Map<String, dynamic> params) async {
   return UserInfo.fromJson(await dioRequest.post(HttpConstants.LOGIN,params:params));
 }
+
+Future<UserInfo> getUserInfoAPI() async {
+  return UserInfo.fromJson(await dioRequest.get(HttpConstants.USER_PROFILE));
+}
