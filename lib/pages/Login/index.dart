@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     if(_globalKey.currentState!.validate()){
                       if(_isChecked == true){
-
+                        
                       } else {
                         ToastUtils.show(context, "请同意隐私协议");
                       }

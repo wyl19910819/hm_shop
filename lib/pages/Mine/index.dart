@@ -126,10 +126,11 @@ class _MineviewState extends State<Mineview> {
       padding: EdgeInsets.all(30),
       child: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(child:_getHeader()),
-          SliverToBoxAdapter(child:SizedBox(height: 20)),
+          SliverToBoxAdapter(child: _getHeader()),
+          SliverToBoxAdapter(child: SizedBox(height: 20)),
           SliverToBoxAdapter(child: _getMenu()),
-          SliverToBoxAdapter(child:SizedBox(height: 20)),
+          SliverToBoxAdapter(child: SizedBox(height: 20)),
+          SliverPersistentHeader(delegate: MySliverPersistentHeaderDelegate(), pinned: true),
           HmMineMorelist(list: _getGoodsList()),
         ],
       ),
@@ -141,5 +142,31 @@ class _MineviewState extends State<Mineview> {
       return [];
     }
     return _goodsList.subTypes.first.goodsItems.items;
+  }
+}
+
+class MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(
+      color: Colors.white,
+      alignment: Alignment.center,
+      child: Text("猜你喜欢",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.bold),),
+    );
+  }
+
+  @override
+  double get maxExtent => 50;
+
+  @override
+  double get minExtent => 50;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }

@@ -13,6 +13,7 @@ class _HmMineMorelistState extends State<HmMineMorelist> {
   Widget _getChildren(int index) {
     // list[index]
     return Container(
+      color: Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -66,21 +67,20 @@ class _HmMineMorelistState extends State<HmMineMorelist> {
   @override
   Widget build(BuildContext context) {
     // return GridView.builder(gridDelegate: Sli, itemBuilder: itemBuilder)
-
-    return  SliverGrid.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 0.75,
-        ),
-        itemCount: widget.list.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: _getChildren(index),
-          );
-        },
+    return SliverGrid.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: 0.75,
+      ),
+      itemCount: widget.list.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: _getChildren(index),
+        );
+      },
     );
   }
 }
