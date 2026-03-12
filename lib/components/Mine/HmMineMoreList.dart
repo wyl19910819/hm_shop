@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hm_shop/viewmodels/home.dart';
 
-class HmMorelist extends StatefulWidget {
+class HmMineMorelist extends StatefulWidget {
   List<GoodsItem> list = [];
-  HmMorelist({Key? key, required this.list}) : super(key: key);
+  HmMineMorelist({Key? key, required this.list}) : super(key: key);
 
   @override
-  _HmMorelistState createState() => _HmMorelistState();
+  _HmMineMorelistState createState() => _HmMineMorelistState();
 }
 
-class _HmMorelistState extends State<HmMorelist> {
+class _HmMineMorelistState extends State<HmMineMorelist> {
   Widget _getChildren(int index) {
     // list[index]
     return Container(
@@ -53,7 +53,7 @@ class _HmMorelistState extends State<HmMorelist> {
                 child: Text(
                   "${widget.list[index].orderNum}付款",
                   maxLines: 1,
-                  style: TextStyle(fontSize: 13,fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                 ),
               ),
             ],
@@ -65,20 +65,22 @@ class _HmMorelistState extends State<HmMorelist> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverGrid.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        childAspectRatio: 0.75,
-      ),
-      itemCount: widget.list.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: _getChildren(index),
-        );
-      },
+    // return GridView.builder(gridDelegate: Sli, itemBuilder: itemBuilder)
+
+    return  SliverGrid.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 0.75,
+        ),
+        itemCount: widget.list.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: _getChildren(index),
+          );
+        },
     );
   }
 }
