@@ -45,17 +45,17 @@ class UserInfo{
 
   factory UserInfo.fromJson(Map<String, dynamic> json) {
     return UserInfo(
-      id: json["id"] as String,
-      account: json["account"] as String,
-      mobile: json["mobile"] as String,
-      token: json["token"] as String,
-      avatar: json["avatar"] as String,
-      nickname: json["nickname"] as String,
-      gender: json["gender"] as String,
-      birthday: json["birthday"] as String,
-      cityCode: json["cityCode"] as String,
-      provinceCode: json["provinceCode"] as String,
-      profession: json["profession"] as String,
+      id: json["id"] ?? "",
+      account: json["account"] ?? "",
+      mobile: json["mobile"] ?? "",
+      token: json["token"] ?? "",
+      avatar: json["avatar"] ?? "",
+      nickname: json["nickname"] ?? "",
+      gender: json["gender"] ?? "",
+      birthday: json["birthday"] ?? "",
+      cityCode: json["cityCode"] ?? "",
+      provinceCode: json["provinceCode"] ?? "",
+      profession: json["profession"] ?? "",
     );
   }
 

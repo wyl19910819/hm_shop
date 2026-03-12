@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hm_shop/api/home.dart';
 import 'package:hm_shop/components/Mine/HmMineMoreList.dart';
+import 'package:hm_shop/stores/UserController.dart';
 import 'package:hm_shop/viewmodels/home.dart';
 
 class Mineview extends StatefulWidget {
@@ -11,27 +13,39 @@ class Mineview extends StatefulWidget {
 }
 
 class _MineviewState extends State<Mineview> {
+  Usercontroller _usercontroller = Get.put(Usercontroller());
   Result _goodsList = Result(id: '', title: '', subTypes: []);
 
   Widget _getHeader() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, "/login");
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: 50),
-        child: Row(
-          children: [
-            Image.asset("lib/assets/icon_head.png", width: 40, height: 40),
-            SizedBox(width: 20),
-            Text(
-              "立即登录",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-            ),
-          ],
+    return Obx(() {
+      return GestureDetector(
+        onTap: () {
+          if (_usercontroller.userInfo.value.id.isEmpty) {
+            Navigator.pushNamed(context, "/login");
+          }
+        },
+        child: Container(
+          margin: EdgeInsets.only(top: 50),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 26,
+                backgroundImage: _usercontroller.userInfo.value.id.isEmpty
+                    ? AssetImage("lib/assets/icon_head.png")
+                    : NetworkImage(_usercontroller.userInfo.value.avatar),
+              ),
+              SizedBox(width: 20),
+              Text(
+                _usercontroller.userInfo.value.id.isEmpty
+                    ? "立即登录"
+                    : _usercontroller.userInfo.value.account,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   final List<Map<String, String>> _list = [
@@ -130,7 +144,10 @@ class _MineviewState extends State<Mineview> {
           SliverToBoxAdapter(child: SizedBox(height: 20)),
           SliverToBoxAdapter(child: _getMenu()),
           SliverToBoxAdapter(child: SizedBox(height: 20)),
-          SliverPersistentHeader(delegate: MySliverPersistentHeaderDelegate(), pinned: true),
+          SliverPersistentHeader(
+            delegate: MySliverPersistentHeaderDelegate(),
+            pinned: true,
+          ),
           HmMineMorelist(list: _getGoodsList()),
         ],
       ),
@@ -155,7 +172,14 @@ class MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
     return Container(
       color: Colors.white,
       alignment: Alignment.center,
-      child: Text("猜你喜欢",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.bold),),
+      child: Text(
+        "猜你喜欢",
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 

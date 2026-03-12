@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hm_shop/api/user.dart';
+import 'package:hm_shop/stores/UserController.dart';
 import 'package:hm_shop/utils/ToastUitls.dart';
 import 'package:hm_shop/viewmodels/login.dart';
 
@@ -16,7 +18,20 @@ class _LoginPageState extends State<LoginPage> {
   GlobalKey<FormState> _globalKey = GlobalKey();
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  UserInfo _userInfo = UserInfo(id: '', account: '', mobile: '', token: '', avatar: '', nickname: '', gender: '', birthday: '', cityCode: '', provinceCode: '', profession: '');
+  UserInfo _userInfo = UserInfo(
+    id: '',
+    account: '',
+    mobile: '',
+    token: '',
+    avatar: '',
+    nickname: '',
+    gender: '',
+    birthday: '',
+    cityCode: '',
+    provinceCode: '',
+    profession: '',
+  );
+  Usercontroller _usercontroller = Get.find();
 
   Future<void> _login() async {
     try {
@@ -25,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
         "password": _passwordController.text,
       });
       ToastUtils.show(context, "登录成功:${_userInfo.nickname}");
+      _usercontroller.updateUserInfo(_userInfo);
       Navigator.pop(context);
     } catch (e) {
       ToastUtils.show(context, "登录失败：${(e as DioException).message}");
