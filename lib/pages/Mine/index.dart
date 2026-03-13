@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:hm_shop/api/home.dart';
 import 'package:hm_shop/api/user.dart';
 import 'package:hm_shop/components/Mine/HmMineMoreList.dart';
+import 'package:hm_shop/stores/TokenManager.dart';
 import 'package:hm_shop/stores/UserController.dart';
+import 'package:hm_shop/utils/ShowDialogUtils.dart';
 import 'package:hm_shop/viewmodels/home.dart';
 import 'package:hm_shop/viewmodels/login.dart';
 
@@ -17,48 +19,68 @@ class Mineview extends StatefulWidget {
 class _MineviewState extends State<Mineview> {
   Usercontroller _usercontroller = Get.find();
   Result _goodsList = Result(id: '', title: '', subTypes: []);
-  UserInfo _userInfo = UserInfo(
-    id: "",
-    account: "",
-    mobile: "",
-    token: "",
-    avatar: "",
-    nickname: "",
-    gender: "",
-    birthday: "",
-    cityCode: "",
-    provinceCode: "",
-    profession: "",
-  );
 
   Widget _getHeader() {
     return Obx(() {
-      return GestureDetector(
-        onTap: () {
-          if (_usercontroller.userInfo.value.id.isEmpty) {
-            Navigator.pushNamed(context, "/login");
-          }
-        },
-        child: Container(
-          margin: EdgeInsets.only(top: 50),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 26,
-                backgroundImage: _usercontroller.userInfo.value.id.isEmpty
-                    ? AssetImage("lib/assets/icon_head.png")
-                    : NetworkImage(_usercontroller.userInfo.value.avatar),
+      return Flex(
+        direction: Axis.horizontal,
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                if (_usercontroller.userInfo.value.id.isEmpty) {
+                  Navigator.pushNamed(context, "/login");
+                }
+              },
+
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 26,
+                    backgroundImage: _usercontroller.userInfo.value.id.isEmpty
+                        ? AssetImage("lib/assets/icon_head.png")
+                        : NetworkImage(_usercontroller.userInfo.value.avatar),
+                  ),
+
+                  SizedBox(width: 20),
+
+                  Text(
+                    _usercontroller.userInfo.value.id.isEmpty
+                        ? "立即登录"
+                        : _usercontroller.userInfo.value.account,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                  ),
+                ],
               ),
-              SizedBox(width: 20),
-              Text(
-                _usercontroller.userInfo.value.id.isEmpty
-                    ? "立即登录"
-                    : _usercontroller.userInfo.value.account,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-              ),
-            ],
+            ),
           ),
-        ),
+          GestureDetector(
+            onTap: () {
+              ShowDialogUtils.showMsgDialog(
+                context,
+                message: '确定退出吗？',
+                ok: () async {
+                  await tokenManager.removeToken();
+                  _usercontroller.userInfo.value = UserInfo.fromJson({});
+                  Navigator.pop(context);
+                },
+                cancel: () {
+                  Navigator.pop(context);
+                },
+              );
+            },
+            child: Text(
+              _usercontroller.userInfo.value.id.isNotEmpty
+                  ? "退出登录"
+                  : _usercontroller.userInfo.value.account,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+                color: Colors.red,
+              ),
+            ),
+          ),
+        ],
       );
     });
   }

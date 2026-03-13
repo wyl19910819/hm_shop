@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hm_shop/api/user.dart';
 import 'package:hm_shop/stores/TokenManager.dart';
 import 'package:hm_shop/stores/UserController.dart';
+import 'package:hm_shop/utils/LoadingDialog.dart';
 import 'package:hm_shop/utils/ToastUitls.dart';
 import 'package:hm_shop/viewmodels/login.dart';
 
@@ -36,15 +37,18 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     try {
+      LoadingDialog.showLoadingDialog(context);
       _userInfo = await loginAPI({
         "account": _phoneController.text,
         "password": _passwordController.text,
       });
+      LoadingDialog.hideLoadingDialog(context);
       ToastUtils.show(context, "登录成功:${_userInfo.nickname}");
       _usercontroller.updateUserInfo(_userInfo);
       tokenManager.setToken(_userInfo.token);
       Navigator.pop(context);
     } catch (e) {
+      LoadingDialog.hideLoadingDialog(context);
       ToastUtils.show(context, "登录失败：${(e as DioException).message}");
     }
   }
